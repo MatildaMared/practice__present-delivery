@@ -38,10 +38,6 @@ export class Elf {
 				currentGiftDelivererIndex = 0;
 		});
 
-		return this.calculateNumberOfUniqueHousesVisited(presentDeliverers);
-	}
-
-	calculateNumberOfUniqueHousesVisited(presentDeliverers: PresentDeliverer[]) {
 		let allHousesVisited: House[] = [];
 
 		presentDeliverers.forEach((presentDeliverer) => {
@@ -51,6 +47,10 @@ export class Elf {
 			];
 		});
 
+		return this.calculateNumberOfUniqueHousesVisited(allHousesVisited);
+	}
+
+	calculateNumberOfUniqueHousesVisited(allHousesVisited: House[]) {
 		const uniqueHousesVisited: House[] = [];
 
 		allHousesVisited.forEach((visitedHouse) => {
