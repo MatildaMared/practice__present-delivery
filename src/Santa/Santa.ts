@@ -1,31 +1,12 @@
 import { Direction } from "../enums";
 import { House } from "../House/House";
+import { PresentDeliverer } from "../PresentDeliverer/PresentDeliverer";
 
-export class Santa {
-	private _numOfHousesDeliveredTo: number = 0;
-	private _housesVisited: House[] = [];
-	private _currentHouse: House = new House(0, 0);
-
-	get numOfHousesDeliveredTo(): number {
-		console.log(
-			"Ho ho ho! I've delivered presents to " +
-				this._numOfHousesDeliveredTo +
-				" houses! 🎄"
-		);
-		return this._numOfHousesDeliveredTo;
-	}
-
-	deliverPresents(instructions: Direction[]) {
-		console.log("Ho ho ho! I'm delivering presents! 🎁");
-
-		this._currentHouse = new House(0, 0);
-		this._housesVisited.push(this._currentHouse);
-		this._numOfHousesDeliveredTo += 1;
-
-		instructions.forEach((direction) => {
-			this.move(direction);
-		});
-	}
+export class Santa implements PresentDeliverer {
+	numOfHousesDeliveredTo: number = 0;
+	housesVisited: House[] = [];
+	currentHouse: House = new House(0, 0);
+	presentsDelivered: number = 0;
 
 	move(direction: Direction) {
 		let houseToVisit: House;
@@ -33,39 +14,45 @@ export class Santa {
 		switch (direction) {
 			case Direction.North:
 				houseToVisit = new House(
-					this._currentHouse.x,
-					this._currentHouse.y + 1
+					this.currentHouse.x,
+					this.currentHouse.y + 1
 				);
 				break;
 			case Direction.South:
 				houseToVisit = new House(
-					this._currentHouse.x,
-					this._currentHouse.y - 1
+					this.currentHouse.x,
+					this.currentHouse.y - 1
 				);
 				break;
 			case Direction.East:
 				houseToVisit = new House(
-					this._currentHouse.x + 1,
-					this._currentHouse.y
+					this.currentHouse.x + 1,
+					this.currentHouse.y
 				);
 				break;
 			case Direction.West:
 				houseToVisit = new House(
-					this._currentHouse.x - 1,
-					this._currentHouse.y
+					this.currentHouse.x - 1,
+					this.currentHouse.y
 				);
 				break;
 		}
 
-		const hasVisitedBefore = this._housesVisited.some((house) => {
-			return house.x === houseToVisit.x && house.y === houseToVisit.y;
+		this.currentHouse = houseToVisit;
+	}
+
+	deliverPresent() {
+		this.presentsDelivered += 1;
+
+		const hasVisitedBefore = this.housesVisited.some((house) => {
+			return house.x === this.currentHouse.x && house.y === this.currentHouse.y;
 		});
 
 		if (!hasVisitedBefore) {
-			this._numOfHousesDeliveredTo += 1;
+			this.numOfHousesDeliveredTo += 1;
 		}
 
-		this._housesVisited.push(houseToVisit);
-		this._currentHouse = houseToVisit;
+		this.housesVisited.push(this.currentHouse);
+		this.currentHouse = this.currentHouse;
 	}
 }
