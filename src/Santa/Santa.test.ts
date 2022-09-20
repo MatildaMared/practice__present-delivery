@@ -10,7 +10,7 @@ describe("Santa", () => {
 		const expected = 4;
 
 		elf.readListOfHousesToVisit(stringOfDirections);
-		const deliveringInstructions = elf.provideDeliveringInstructions([santa]);
+		elf.provideDeliveringInstructions([santa]);
 		const result = santa.numOfHousesDeliveredTo;
 
 		expect(result).toBe(expected);

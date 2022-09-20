@@ -1,9 +1,10 @@
 import { Direction } from "../enums";
+import { House } from "../House/House";
 import { PresentDeliverer } from "../PresentDeliverer/PresentDeliverer";
 import { Santa } from "../Santa/Santa";
 
 export class Elf {
-	private _deliveringInstructions: Direction[] = [];
+	deliveringInstructions: Direction[] = [];
 
 	readListOfHousesToVisit(stringOfHousesToVisit: string) {
 		const deliveringInstructions = stringOfHousesToVisit.split("");
@@ -15,20 +16,53 @@ export class Elf {
 				availableDirections.includes(deliveringInstruction)
 		);
 
-		this._deliveringInstructions =
-			filteredDeliveringInstructions as Direction[];
+		this.deliveringInstructions = filteredDeliveringInstructions as Direction[];
 	}
 
-	provideDeliveringInstructions(giftDeliverers: PresentDeliverer[]) {
-		if (giftDeliverers.length === 1) {
-			giftDeliverers[0].deliverPresent();
-
-			this._deliveringInstructions.forEach((direction) => {
-				giftDeliverers[0].move(direction);
-				giftDeliverers[0].deliverPresent();
-			});
-		} else {
-			// do something
+	provideDeliveringInstructions(presentDeliverers: PresentDeliverer[]) {
+		if (this.deliveringInstructions.length === 0) {
+			throw new Error("I need to read a list of houses to visit first!");
 		}
+
+		presentDeliverers.forEach((presentDeliverers) => {
+			presentDeliverers.deliverPresent();
+		});
+
+		let currentGiftDelivererIndex = 0;
+		this.deliveringInstructions.forEach((direction) => {
+			presentDeliverers[currentGiftDelivererIndex].move(direction);
+			presentDeliverers[currentGiftDelivererIndex].deliverPresent();
+
+			currentGiftDelivererIndex += 1;
+			if (currentGiftDelivererIndex === presentDeliverers.length)
+				currentGiftDelivererIndex = 0;
+		});
+
+		return this.calculateNumberOfUniqueHousesVisited(presentDeliverers);
+	}
+
+	calculateNumberOfUniqueHousesVisited(presentDeliverers: PresentDeliverer[]) {
+		let allHousesVisited: House[] = [];
+
+		presentDeliverers.forEach((presentDeliverer) => {
+			allHousesVisited = [
+				...allHousesVisited,
+				...presentDeliverer.housesVisited,
+			];
+		});
+
+		const uniqueHousesVisited: House[] = [];
+
+		allHousesVisited.forEach((visitedHouse) => {
+			const hasVisitedBefore = uniqueHousesVisited.some((house) => {
+				return visitedHouse.x === house.x && visitedHouse.y === house.y;
+			});
+
+			if (!hasVisitedBefore) {
+				uniqueHousesVisited.push(visitedHouse);
+			}
+		});
+
+		return uniqueHousesVisited.length;
 	}
 }
