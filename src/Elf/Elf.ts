@@ -1,7 +1,6 @@
 import { Direction } from "../enums";
 import { House } from "../House/House";
 import { PresentDeliverer } from "../PresentDeliverer/PresentDeliverer";
-import { Santa } from "../Santa/Santa";
 
 export class Elf {
 	deliveringInstructions: Direction[] = [];

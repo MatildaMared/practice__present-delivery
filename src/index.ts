@@ -1,15 +1,32 @@
 import { Elf } from "./Elf/Elf";
 import { Santa } from "./Santa/Santa";
 import * as fs from "fs";
+import { RobotSanta } from "./RobotSanta/RobotSanta";
 
-const drunkElf = new Elf();
+const elf = new Elf();
 const santa = new Santa();
 
-const testData = fs.readFileSync(__dirname + "/testData.txt", "utf8");
-console.log("testData", testData);
+const stringOfDirections = fs.readFileSync(__dirname + "/testData.txt", "utf8");
 
-drunkElf.readListOfHousesToVisit(testData);
-const deliveringInstructions = drunkElf.provideDeliveringInstructions();
+console.log("Will visit houses with only one santa! 🎄 🎁");
+const totalHousesVisited = elf.provideDeliveringInstructions(
+	stringOfDirections,
+	[santa]
+);
 
-santa.deliverPresents(deliveringInstructions);
-const housesVisited = santa.numOfHousesDeliveredTo;
+console.log("Total houses visited with only one santa: ", totalHousesVisited);
+
+console.log("-----------------");
+
+console.log("Will visit houses with both santa and robot santa! 🎅 🤖 🎄");
+const anotherSanta = new Santa();
+const robotSanta = new RobotSanta();
+
+const totalHousesVisitedWithSantaAndRobot = elf.provideDeliveringInstructions(
+	stringOfDirections,
+	[anotherSanta, robotSanta]
+);
+console.log(
+	"Total houses visited with santa and robot santa: ",
+	totalHousesVisitedWithSantaAndRobot
+);
