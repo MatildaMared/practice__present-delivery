@@ -6,8 +6,8 @@ import { Santa } from "../Santa/Santa";
 export class Elf {
 	deliveringInstructions: Direction[] = [];
 
-	readListOfHousesToVisit(stringOfHousesToVisit: string) {
-		const deliveringInstructions = stringOfHousesToVisit.split("");
+	readStringOfDirections(stringOfDirections: string) {
+		const deliveringInstructions = stringOfDirections.split("");
 
 		const availableDirections: string[] = Object.values(Direction);
 
@@ -19,10 +19,15 @@ export class Elf {
 		this.deliveringInstructions = filteredDeliveringInstructions as Direction[];
 	}
 
-	provideDeliveringInstructions(presentDeliverers: PresentDeliverer[]) {
-		if (this.deliveringInstructions.length === 0) {
-			throw new Error("I need to read a list of houses to visit first!");
+	provideDeliveringInstructions(
+		stringOfDirections: string,
+		presentDeliverers: PresentDeliverer[]
+	) {
+		if (stringOfDirections.length === 0) {
+			throw new Error("Please give me some directions!");
 		}
+
+		this.readStringOfDirections(stringOfDirections);
 
 		presentDeliverers.forEach((presentDeliverers) => {
 			presentDeliverers.deliverPresent();

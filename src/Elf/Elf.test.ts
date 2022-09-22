@@ -5,34 +5,24 @@ import * as fs from "fs";
 import { House } from "../House/House";
 
 describe("Elf", () => {
-	describe("readListsOfHousesToVisit", () => {
-		it("reads the list of houses to visit", () => {
-			const elf = new Elf();
-			elf.readListOfHousesToVisit(">v");
-
-			const expected = [">", "v"];
-			const result = elf.deliveringInstructions;
-
-			expect(result).toEqual(expected);
-		});
-	});
-
 	describe("provideInstructions method", () => {
-		it("throws an error if the provideInstructionsmethod is called before reading the string of directions", () => {
+		it("throws an error if the stringOfDirections is empty", () => {
 			const elf = new Elf();
 
-			expect(() => elf.provideDeliveringInstructions([])).toThrowError(
-				"I need to read a list of houses to visit first!"
+			expect(() => elf.provideDeliveringInstructions("", [])).toThrowError(
+				"Please give me some directions!"
 			);
 		});
 
 		it("returns the correct result given a single present deliverer", () => {
 			const elf = new Elf();
 			const santa = new Santa();
-			elf.readListOfHousesToVisit("^>v<");
+			const stringOfDirections = "^>v<";
 
 			const expected = 4;
-			const result = elf.provideDeliveringInstructions([santa]);
+			const result = elf.provideDeliveringInstructions(stringOfDirections, [
+				santa,
+			]);
 
 			expect(result).toBe(expected);
 		});
@@ -41,10 +31,13 @@ describe("Elf", () => {
 			const elf = new Elf();
 			const santa = new Santa();
 			const robotSanta = new RobotSanta();
-			elf.readListOfHousesToVisit("^v^v^v^v^v");
+			const stringOfDirections = "^v^v^v^v^v";
 
 			const expected = 11;
-			const result = elf.provideDeliveringInstructions([santa, robotSanta]);
+			const result = elf.provideDeliveringInstructions(stringOfDirections, [
+				santa,
+				robotSanta,
+			]);
 
 			expect(result).toBe(expected);
 		});
@@ -57,10 +50,12 @@ describe("Elf", () => {
 				__dirname + "/../testData.txt",
 				"utf8"
 			);
-			elf.readListOfHousesToVisit(stringOfDirections);
 
 			const expected = 2631;
-			const result = elf.provideDeliveringInstructions([santa, robotSanta]);
+			const result = elf.provideDeliveringInstructions(stringOfDirections, [
+				santa,
+				robotSanta,
+			]);
 
 			expect(result).toBe(expected);
 		});

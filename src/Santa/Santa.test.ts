@@ -9,8 +9,7 @@ describe("Santa", () => {
 		const stringOfDirections = "^>v<";
 		const expected = 4;
 
-		elf.readListOfHousesToVisit(stringOfDirections);
-		elf.provideDeliveringInstructions([santa]);
+		elf.provideDeliveringInstructions(stringOfDirections, [santa]);
 		const result = santa.numOfHousesDeliveredTo;
 
 		expect(result).toBe(expected);
@@ -25,8 +24,7 @@ describe("Santa", () => {
 		);
 		const expected = 2572;
 
-		elf.readListOfHousesToVisit(stringOfDirections);
-		elf.provideDeliveringInstructions([santa]);
+		elf.provideDeliveringInstructions(stringOfDirections, [santa]);
 		const result = santa.numOfHousesDeliveredTo;
 
 		expect(result).toBe(expected);
